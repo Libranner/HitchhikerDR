@@ -4,10 +4,12 @@ describe User do
 
   before(:each) do
     @attr = {
-      :name => "Example User",
-      :email => "user@example.com",
-      :password => "12345678",
-      :password_confirmation => "12345678"
+        :name => "Example User",
+        :email => "user@example.com",
+        :password => "12345678",
+        :password_confirmation => "12345678",
+        :uid => "123",
+        :username => "user0"
     }
   end
 
@@ -52,7 +54,7 @@ describe User do
   describe "passwords" do
 
     before(:each) do
-      @user = User.new(@attr)
+      @user = FactoryGirl.create(:user)
     end
 
     it "should have a password attribute" do
@@ -68,12 +70,12 @@ describe User do
 
     it "should require a password" do
       User.new(@attr.merge(:password => "", :password_confirmation => "")).
-        should_not be_valid
+          should_not be_valid
     end
 
     it "should require a matching password confirmation" do
       User.new(@attr.merge(:password_confirmation => "invalid")).
-        should_not be_valid
+          should_not be_valid
     end
 
     it "should reject short passwords" do
@@ -99,5 +101,39 @@ describe User do
     end
 
   end
+  describe "drivers and passengers" do
+
+    it "should get all drivers" do
+      FactoryGirl.create(:user)
+      FactoryGirl.create(:driver)
+      FactoryGirl.create(:driver)
+
+      drivers = User.drivers
+      drivers.size.should eql 2
+    end
+
+    it "should get all trips of a user" do
+      trip = FactoryGirl.create(:trip)
+      trip2 = FactoryGirl.create(:trip)
+
+      user1 = FactoryGirl.create(:user)
+      trip.add_reservation(user1,1)
+      trip2.add_reservation(user1,1)
+
+      user1.trips_reservations.size.should eql 2
+    end
+
+    #it "Trips of a user" do
+    #  trip = FactoryGirl.create(:trip,:sits=> 3)
+    #  trip2 = FactoryGirl.create(:trip,:sits=> 3)
+    #  user = FactoryGirl.create(:user)
+    #  trip2.add_checkin(user,2)
+    #  trip.add_checkin(user,1)
+    #  user.all_check_ins.size.should eql 2
+    #end
+
+  end
+
+
 
 end

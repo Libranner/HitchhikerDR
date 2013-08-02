@@ -1,0 +1,27 @@
+%p#notice= notice
+
+%p
+  %b From:
+  = @trip.from
+%p
+  %b To:
+  = @trip.to
+%p
+  %b Status:
+  = @trip.status
+%p
+  %b Frequency:
+  = @trip.frequency
+%p
+  %b Conditions:
+  = @trip.conditions
+%p
+  %b Departure:
+  = @trip.departure
+%p
+  %b Arrive:
+  = @trip.arrive
+
+= link_to 'Edit', edit_trip_path(@trip)
+\|
+= link_to 'Back', trips_path

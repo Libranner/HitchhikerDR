@@ -9,5 +9,4 @@ describe AuthenticationsController, "OmniAuth" do
     request.env["omniauth.auth"]['uid'].should == '1234'
   end
 
-
 end

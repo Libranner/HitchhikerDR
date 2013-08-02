@@ -15,6 +15,8 @@ gem 'mongoid'
 gem 'omniauth-twitter'
 gem 'omniauth-facebook'
 gem 'nifty-generators'
+gem 'will_paginate'
+gem 'will_paginate_mongoid'
 
 group :development do
   gem 'better_errors'

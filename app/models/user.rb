@@ -8,7 +8,6 @@ class User
   devise :database_authenticatable, :registerable,
          :recoverable, :rememberable, :trackable, :validatable
 
-
   ## Database authenticatable
   field :email,              :type => String, :default => ""
   field :encrypted_password, :type => String, :default => ""
@@ -40,14 +39,27 @@ class User
   # field :authentication_token, :type => String
   # run 'rake db:mongoid:create_indexes' to create indexes
   field :name, type: String
-  validates_presence_of :name
-  attr_accessible :name, :email, :password, :password_confirmation, :remember_me, :created_at, :updated_at
-
   field :username, type: String
   field :provider, type: String
   field :uid, type: String
   field :image, type: String
+  field :hitchhiker_type, type:Integer
+  field :telephone, type:String
+  field :driver, type: Boolean
 
+  validates_presence_of :name
+  validates_presence_of :uid
+  validates :username, uniqueness: true, presence: true
+
+
+  attr_accessible :name, :driver, :email, :image, :hitchhiker_type, :password, :password_confirmation, :remember_me,
+                  :created_at, :updated_at,:username,:uid
+
+
+
+  def driver?
+    driver
+  end
 
   def self.from_omniauth(auth)
     where(auth.slice(:provider, :uid)).first_or_create do |user|
@@ -83,4 +95,16 @@ class User
       super
     end
   end
+
+  def trips_reservations
+    ids = reservations.distinct(:trip_id)
+    Trip.find(ids)
+  end
+
+  #Scopes
+  scope :drivers, where(driver:true)
+  scope :passengers, where(driver:false)
+
+  has_many :trips
+  has_many :reservations
 end

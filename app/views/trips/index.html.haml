@@ -1,0 +1,36 @@
+%h1 Listing trips 6
+
+= form_tag trips_path, :method => 'get' do
+  %p
+    = text_field_tag :search, params[:search]
+    = submit_tag 'Search', :name => nil
+
+%table
+  %tr
+    %th From
+    %th To
+    %th Status
+    %th Frequency
+    %th Conditions
+    %th Departure
+    %th Arrive
+    %th
+    %th
+    %th
+
+  - @trips.each do |trip|
+    %tr
+      %td= trip.from
+      %td= trip.to
+      %td= trip.status
+      %td= trip.frequency
+      %td= trip.conditions
+      %td= trip.departure
+      %td= trip.arrive
+      %td= link_to 'Show', trip
+      %td= link_to 'Edit', edit_trip_path(trip)
+      %td= link_to 'Destroy', trip, :method => :delete, :data => { :confirm => 'Are you sure?' }
+= will_paginate @trips
+%br
+
+= link_to 'New Trip', new_trip_path

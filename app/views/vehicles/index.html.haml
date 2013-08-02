@@ -1,0 +1,23 @@
+%h1 Listing vehicles
+
+%table
+  %tr
+    %th Make
+    %th Model
+    %th Year
+    %th
+    %th
+    %th
+
+  - @vehicles.each do |vehicle|
+    %tr
+      %td= vehicle.make
+      %td= vehicle.model
+      %td= vehicle.year
+      %td= link_to 'Show', vehicle
+      %td= link_to 'Edit', edit_vehicle_path(vehicle)
+      %td= link_to 'Destroy', vehicle, :method => :delete, :data => { :confirm => 'Are you sure?' }
+
+%br
+
+= link_to 'New Vehicle', new_vehicle_path

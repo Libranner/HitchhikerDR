@@ -15,6 +15,7 @@ if defined?(Bundler)
   # Bundler.require(:default, :assets, Rails.env)
 end
 
+
 module Hitchhiker
   class Application < Rails::Application
 

@@ -5,11 +5,12 @@ class AuthenticationsController < ApplicationController
 
   def create
     #request.env["omniauth.auth"]
-    render text: request.env["omniauth.auth"].to_yaml
-    return
+    #render text: request.env["omniauth.auth"].to_yaml
+    #return
 
     user = User.from_omniauth(request.env["omniauth.auth"])
     if user.persisted?
+      UserMailer.signup_confirmation(user).deliver if user.sign_in_count == 0
       flash.notice = "Signed in!"
       sign_in_and_redirect user
     else
