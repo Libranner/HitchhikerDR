@@ -30,6 +30,13 @@ describe TripsController do
   # TripsController. Be sure to keep this updated too.
   let(:valid_session) { {} }
 
+  before :each do
+
+    @user = FactoryGirl.create(:driver)
+    Ability.new(@user)
+
+  end
+
   describe "GET index" do
     it "assigns all trips as @trips" do
       trip = Trip.create! valid_attributes
@@ -98,7 +105,9 @@ describe TripsController do
       end
 
       it "redirects to the trip" do
-        trip = Trip.create! valid_attributes
+        @user2 = FactoryGirl.create(:driver)
+        Ability.new(@user2)
+        trip = @user2.trips.create(valid_attributes)
         put :update, {:id => trip.to_param, :trip => valid_attributes}, valid_session
         response.should redirect_to(trip)
       end

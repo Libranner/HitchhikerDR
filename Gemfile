@@ -17,7 +17,7 @@ gem 'omniauth-facebook'
 gem 'nifty-generators'
 gem 'will_paginate'
 gem 'will_paginate_mongoid'
-
+gem 'cancan'
 group :development do
   gem 'better_errors'
   gem 'binding_of_caller', :platforms=>[:mri_19, :rbx]

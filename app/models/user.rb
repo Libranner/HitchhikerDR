@@ -8,12 +8,17 @@ class User
   devise :database_authenticatable, :registerable,
          :recoverable, :rememberable, :trackable, :validatable
 
-  ## Database authenticatable
+  # run 'rake db:mongoid:create_indexes' to create indexes
+  field :name, type: String
+  field :username, type: String
+  field :provider, type: String
+  field :uid, type: String
+  field :image, type: String
+  field :hitchhiker_type, type:Integer
+  field :telephone, type:String
+  field :driver, type: Boolean, default: false
   field :email,              :type => String, :default => ""
   field :encrypted_password, :type => String, :default => ""
-
-  validates_presence_of :encrypted_password if :provider.nil? || :provider.empty?
-
   ## Rememberable
   field :remember_created_at, :type => Time
 
@@ -24,33 +29,10 @@ class User
   field :current_sign_in_ip, :type => String
   field :last_sign_in_ip,    :type => String
 
-  ## Confirmable
-  # field :confirmation_token,   :type => String
-  # field :confirmed_at,         :type => Time
-  # field :confirmation_sent_at, :type => Time
-  # field :unconfirmed_email,    :type => String # Only if using reconfirmable
-
-  ## Lockable
-  # field :failed_attempts, :type => Integer, :default => 0 # Only if lock strategy is :failed_attempts
-  # field :unlock_token,    :type => String # Only if unlock strategy is :email or :both
-  # field :locked_at,       :type => Time
-
-  ## Token authenticatable
-  # field :authentication_token, :type => String
-  # run 'rake db:mongoid:create_indexes' to create indexes
-  field :name, type: String
-  field :username, type: String
-  field :provider, type: String
-  field :uid, type: String
-  field :image, type: String
-  field :hitchhiker_type, type:Integer
-  field :telephone, type:String
-  field :driver, type: Boolean
-
   validates_presence_of :name
   validates_presence_of :uid
   validates :username, uniqueness: true, presence: true
-
+  validates_presence_of :encrypted_password if :provider.nil? || :provider.empty?
 
   attr_accessible :name, :driver, :email, :image, :hitchhiker_type, :password, :password_confirmation, :remember_me,
                   :created_at, :updated_at,:username,:uid

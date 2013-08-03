@@ -3,6 +3,7 @@ require 'spec_helper'
 describe Trip do
 
   before :each do
+
     @driver = FactoryGirl.create(:user, username: 'lsantos')
     @trip = FactoryGirl.create(:trip,:sits=> 3)
     @driver.trips.create(sits: 2)
