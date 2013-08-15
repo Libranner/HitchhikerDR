@@ -1,5 +1,25 @@
-%h3 User
-%p
-  User: #{@user.name}
-%p
-  Email: #{@user.email if @user.email}
+%h2 Edit
+= simple_form_for @user do |f|
+  = f.error_notification
+  .form-bordered.span6
+    .form-inputs
+      = field_set_tag do
+        %legend Personal information
+        = image_tag(f.object.image_url, class:'photo')
+        = f.input :username, disabled: true
+        = f.input :name, disabled: true
+        = f.input :email, disabled: true, autofocus: true
+        = f.input :driver,as: :boolean, inline_label: 'Driver', label: false
+        = f.input :telephone, disabled:true
+    - if f.object.encrypted_password.present?
+      = f.input :password, :autocomplete => "off", :hint => "leave it blank if you don't want to change it", :required => false
+      = f.input :password_confirmation, :required => false
+      = f.input :current_password, :hint => "we need your current password to confirm your changes", :required => true
+  .form-bordered.span6
+    .form-inputs
+      = field_set_tag do
+        %legend Vehicle information
+        = f.input :vehicle_make, disabled: true
+        = f.input :vehicle_model, disabled: true
+        = f.input :vehicle_year, disabled: true
+

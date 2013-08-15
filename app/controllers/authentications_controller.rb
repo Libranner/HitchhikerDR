@@ -10,9 +10,10 @@ class AuthenticationsController < ApplicationController
 
     user = User.from_omniauth(request.env["omniauth.auth"])
     if user.persisted?
-      UserMailer.signup_confirmation(user).deliver if user.sign_in_count == 0
+      UserMailer.sign_up_confirmation(user).deliver if user.sign_in_count == 0
       flash.notice = "Signed in!"
-      sign_in_and_redirect user
+      sign_in user
+      redirect_to trips_path
     else
       session["devise.user_attributes"] = user.attributes
       redirect_to new_user_registration_url

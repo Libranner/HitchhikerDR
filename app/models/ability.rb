@@ -4,8 +4,9 @@ class Ability
   def initialize(user)
     # Define abilities for the passed in user here. For example:
     #
-    user ||= User.new
-    if user.driver?
+    if user.nil?
+      can :read, Trip
+    else
       can :create, Trip
       can :destroy, Trip do |trip|
         trip.try(:user) == user
@@ -13,10 +14,12 @@ class Ability
       can :update, Trip do |trip|
         trip.try(:user) == user
       end
+
+      can :reserve, Trip do |trip|
+        trip.try(:user) != user
+      end
+
       can :read, Trip
-    else
-      can :read, Trip
-      can :create, Reservation
     end
     #
     # The first argument to `can` is the action you are giving the user 

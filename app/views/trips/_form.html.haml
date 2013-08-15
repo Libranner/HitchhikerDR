@@ -1,31 +1,33 @@
-= form_for @trip do |f|
-  - if @trip.errors.any?
-    #error_explanation
-      %h2= "#{pluralize(@trip.errors.count, "error")} prohibited this trip from being saved:"
-      %ul
-        - @trip.errors.full_messages.each do |msg|
-          %li= msg
-
-  .field
-    = f.label :from
-    = f.text_field :from
-  .field
-    = f.label :to
-    = f.text_field :to
-  .field
-    = f.label :status
-    = f.text_field :status
-  .field
-    = f.label :frequency
-    = f.text_field :frequency
-  .field
-    = f.label :conditions
-    = f.text_field :conditions
-  .field
-    = f.label :departure
-    = f.text_field :departure
-  .field
-    = f.label :arrive
-    = f.text_field :arrive
-  .actions
-    = f.submit 'Save'
+.row-fluid
+  .span12
+    = simple_form_for @trip do |f|
+      - if @trip.errors.any?
+        .alert.alert-error
+          %a.close{"data-dismiss" => 'alert'}
+            ×
+          #error_explanation
+            %h2= "#{pluralize(@trip.errors.count, "error")} prohibited this trip from being saved:"
+            %ul
+              - @trip.errors.full_messages.each do |msg|
+                %li= msg
+      .span6.bordered.center-content
+        .form-inputs
+          = field_set_tag do
+            %legend Trip information
+            .row-fluid
+              = f.input :from, require: true,  :wrapper_html => { :class => 'span6' }
+              = f.input :to, require: true,  :wrapper_html => { :class => 'span6' }
+            .row-fluid
+              = f.input :status, collection: @status.sort.map {|k,v| [v,k]} , :wrapper_html => { :class => 'span6' }
+              = f.input :frequency, collection: @frequencies.sort.map {|k,v| [v,k]} , :wrapper_html => { :class => 'span6' }
+        .form-inputs
+          = field_set_tag do
+            %legend Trip conditions and schedule
+            .row-fluid
+              = f.input :js_start_time, require: true, as: :date_time_picker, label: "Start Time", :wrapper_html => { :class => 'span6' }
+              = f.input :js_finish_time, require: true, as: :date_time_picker, label: "Finish Time", :wrapper_html => { :class => 'span6' }
+            %label Sits avalaible
+            = f.number_field :sits, require: true
+            = f.input :conditions, as: :text, :input_html => { :cols => 50, :rows => 3, class: 'span12' }
+            .actions
+              = f.button :submit, 'Save', class: 'btn btn-large btn-primary pull-right'

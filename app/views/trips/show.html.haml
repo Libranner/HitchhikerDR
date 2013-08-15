@@ -1,27 +1,101 @@
-%p#notice= notice
+.row-fluid
+  .page-header
+    %h1 Trip information
+  .form-bordered.span3
+    .form-inputs
+      = field_set_tag do
+        %legend Driver information
+        %a{'data-original-title' => @trip.driver.name,
+          'data-placement' => 'top', :href => "/users/#{@trip.driver.id}", :title => '', class: 'hitchhiker-face'}
+          = image_tag(@trip.driver.image_url, class:'photo')
+        %label Username
+        .input-prepend
+          %span.add-on
+            %i.icon-user
+          = text_field_tag nil, @trip.driver.username, disabled: true, class: 'span12'
+        %label Name
+        .input-prepend
+          %span.add-on
+            U
+          = text_field_tag nil, @trip.driver.name, disabled: true, class: 'span12'
+        %label Email
+        .input-prepend
+          %span.add-on
+            %i.icon-envelope
+          = text_field_tag nil, @trip.driver.email, disabled: true, class: 'span12'
+        %label Telephone
+        .input-prepend
+          %span.add-on
+            = '#'
+          = text_field_tag nil, @trip.driver.telephone, disabled: true, class: 'span12'
+  = simple_form_for @trip, url: "/reservation/#{@trip.id}", method: :post, html: {class: 'span5'} do |f|
+    - if @trip.errors.any?
+      #error_explanation
+        %h2= "#{pluralize(@trip.errors.count, "error")} prohibited this trip from being saved:"
+        %ul
+          - @trip.errors.full_messages.each do |msg|
+            %li= msg
+    .form-trip.span12
+      .form-inputs
+        = field_set_tag do
+          %legend Trip information
+          .row-fluid
+            = f.input :from, disabled: true,  :wrapper_html => { :class => 'span6' }
+            = f.input :to, disabled: true,  :wrapper_html => { :class => 'span6' }
+          .row-fluid
+            = f.input :status, disabled: true, collection: @status.sort.map {|k,v| [v,k]} , :wrapper_html => { :class => 'span6' }
+            = f.input :frequency, disabled: true, collection: @frequencies.sort.map {|k,v| [v,k]} , :wrapper_html => { :class => 'span6' }
+      .form-inputs
+        = field_set_tag do
+          %legend Trip conditions and schedule
+          .row-fluid
+            = f.input :js_start_time, disabled: true , label: "Start Time", :wrapper_html => { :class => 'span6'}
+            = f.input :js_finish_time, disabled: true , label: "Finish Time", :wrapper_html => { :class => 'span6' },disabled: true
+          = f.input :conditions, disabled: true, as: :text, :input_html => { :cols => 50, :rows => 2, class: 'span12' }
+        %label Passengers
+        .label-sits
+          There are
+          %span.label.label-important
+            = @trip.available_sits
+          sits available.
+        .passengers
+          - if @trip.users_checkin.nil? || @trip.users_checkin.size == 0
+            There's no reservations for this trip :(...
+            - if can? :reserve, @trip
+              %strong Be the first one!
+          - else
+            - @trip.users_checkin.each do |u|
+              %a{'data-original-title' => u.name,
+                'data-placement' => 'top', :href => "/users/#{u.id}", :title => '', class: 'hitchhiker-face'}
+                = image_tag(u.image_url, class:'mini-photo')
+        .pull-right
+          - if current_user.nil?
+            %span.label.label-important
+              You have to sign in.
+          -elsif can? :reserve, @trip
+            - if @trip.users_checkin.include? current_user
+              = f.button :submit, 'Cancel reservation', class: 'btn btn-large btn-danger'
+            - elsif @trip.available_sits > 0
+              = f.button :submit, 'Check In', class: 'btn btn-large btn-primary'
+            - else
+              There's no sits available :(
 
-%p
-  %b From:
-  = @trip.from
-%p
-  %b To:
-  = @trip.to
-%p
-  %b Status:
-  = @trip.status
-%p
-  %b Frequency:
-  = @trip.frequency
-%p
-  %b Conditions:
-  = @trip.conditions
-%p
-  %b Departure:
-  = @trip.departure
-%p
-  %b Arrive:
-  = @trip.arrive
+  .form-trip.span4
+    = field_set_tag do
+      %legend Trip information
+      /= image_tag "http://maps.google.com/maps/api/staticmap?size=300x300&sensor=false&zoom=16&markers=#{@trip.to_coordinates[0]}%2C#{@trip.to_coordinates[1]}"
+      = gmaps(@polylines)
 
-= link_to 'Edit', edit_trip_path(@trip)
-\|
-= link_to 'Back', trips_path
+
+
+
+/{ "direction" => {"data"    => { "from" => "toulon, france", "to" => "paris, france"} , "options" => {"waypoints" => ["toulouse, france", "brest, france"], "display_panel" => true, "panel_id" => "instructions"}}})
+
+/= gmaps4rails(@json)
+
+:javascript
+  $('#myModal').on('shown', function () {
+      google.maps.event.trigger(map, "resize");
+  });
+
+  $('.hitchhiker-face').tooltip()

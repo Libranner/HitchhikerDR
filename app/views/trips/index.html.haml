@@ -1,36 +1,37 @@
-%h1 Listing trips 6
+- model_class = Trip
+.page-header
+  %h1=t '.title', :default => model_class.model_name.human.pluralize.titleize
 
-= form_tag trips_path, :method => 'get' do
-  %p
-    = text_field_tag :search, params[:search]
-    = submit_tag 'Search', :name => nil
+= form_tag trips_path, :method => 'get', class:'form-search span6' do
+  .input-append
+    = text_field_tag :search, params[:search], class: 'span12 search-query'
+    = submit_tag 'Search', :name => nil, class: 'btn'
+.span5.pull-right
+  = will_paginate @trips, :class => 'pagination pagination-right pull-right'
 
-%table
-  %tr
-    %th From
-    %th To
-    %th Status
-    %th Frequency
-    %th Conditions
-    %th Departure
-    %th Arrive
-    %th
-    %th
-    %th
+%table.table.table-striped.bordered
+  %tbody
+    %thead
+      %tr
+        %th Destination
+        %th Start Time
+        %th Finish Time
+        %th Available sits
+        %th
+    - @trips.each do |trip|
+      %tr
+        %td
+          = link_to "From: #{trip.from} To: #{trip.to}", trip_path(trip)
+        %td= trip.start_time
+        %td= trip.finish_time
+        %td
+          %span.badge.badge-info
+            = trip.available_sits
+        %td
+          - if can? :update, trip
+            = link_to t('.edit', :default => t("helpers.links.edit")), edit_trip_path(trip), :class => 'btn btn-mini'
+          - if can? :destroy, trip
+            = link_to t('.destroy', :default => t("helpers.links.destroy")), trip_path(trip), :method => :delete, :data => { :confirm => t('.confirm', :default => t("helpers.links.confirm", :default => 'Are you sure?')) }, :class => 'btn btn-mini btn-danger'
 
-  - @trips.each do |trip|
-    %tr
-      %td= trip.from
-      %td= trip.to
-      %td= trip.status
-      %td= trip.frequency
-      %td= trip.conditions
-      %td= trip.departure
-      %td= trip.arrive
-      %td= link_to 'Show', trip
-      %td= link_to 'Edit', edit_trip_path(trip)
-      %td= link_to 'Destroy', trip, :method => :delete, :data => { :confirm => 'Are you sure?' }
-= will_paginate @trips
-%br
-
-= link_to 'New Trip', new_trip_path
+- if can? :create, Trip
+  = link_to 'Create a new Trip', new_trip_path, :class => 'btn btn-primary'

@@ -13,8 +13,8 @@ class User
   field :username, type: String
   field :provider, type: String
   field :uid, type: String
-  field :image, type: String
-  field :hitchhiker_type, type:Integer
+  field :image_url, type: String
+  #field :hitchhiker_type, type:Boolean
   field :telephone, type:String
   field :driver, type: Boolean, default: false
   field :email,              :type => String, :default => ""
@@ -29,19 +29,29 @@ class User
   field :current_sign_in_ip, :type => String
   field :last_sign_in_ip,    :type => String
 
+  #vehicles
+  field :vehicle_make, type:String
+  field :vehicle_model, type:String
+  field :vehicle_year, type:Integer
+
+
+  validates_presence_of :telephone
   validates_presence_of :name
   validates_presence_of :uid
   validates :username, uniqueness: true, presence: true
   validates_presence_of :encrypted_password if :provider.nil? || :provider.empty?
+  validates :telephone, numericality: true
 
   attr_accessible :name, :driver, :email, :image, :hitchhiker_type, :password, :password_confirmation, :remember_me,
-                  :created_at, :updated_at,:username,:uid
+                  :created_at, :updated_at,:username,:uid,:telephone,:vehicle_make,:vehicle_model, :vehicle_year
 
 
 
   def driver?
     driver
   end
+
+
 
   def self.from_omniauth(auth)
     where(auth.slice(:provider, :uid)).first_or_create do |user|
@@ -50,7 +60,11 @@ class User
       user.username = auth.info.nickname
       user.email = auth.info.email
       user.name = auth.info.name
-      user.image = auth.info.image
+      if user.provider == 'twitter'
+        user.image_url = auth.info.image.sub! '_normal.jpeg', '.jpeg'
+      elsif user.provider == 'facebook'
+        user.image_url = auth.info.image.sub! 'square', 'large'
+      end
       #user.password = SecureRandom.hex(10)
     end
   end
