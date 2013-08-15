@@ -1,7 +1,5 @@
 Hitchhiker::Application.routes.draw do
   resources :trips
-
-
   resources :vehicles, only:[:index, :create]
   get 'vehicles/makes'
   get "vehicles/:makes/models", to: 'vehicles#models'

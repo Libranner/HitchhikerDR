@@ -23,7 +23,7 @@ describe TripsController do
   # This should return the minimal set of attributes required to create a valid
   # Trip. As you add validations to Trip, be sure to
   # adjust the attributes here as well.
-  let(:valid_attributes) { { "from" => "SD", "to" => "SC", departure: Time.now, arrive: Time.now, sits: 1 } }
+  let(:valid_attributes) { { "from" => "SD", "to" => "SC", start_time: Time.now, finish_time: Time.now, sits: 1 } }
 
   # This should return the minimal set of values that should be in the session
   # in order to pass any filters (e.g. authentication) defined in

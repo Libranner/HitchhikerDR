@@ -9,7 +9,8 @@ describe User do
         :password => "12345678",
         :password_confirmation => "12345678",
         :uid => "123",
-        :username => "user0"
+        :username => "user0",
+        :telephone => "8095281111"
     }
   end
 

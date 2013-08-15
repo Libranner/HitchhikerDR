@@ -8,6 +8,7 @@ FactoryGirl.define do
     email {"#{username}@hitchhikerdr.com"}
     password '12345678'
     password_confirmation '12345678'
+    telephone 8095281111
     driver false
 
     factory :driver do
