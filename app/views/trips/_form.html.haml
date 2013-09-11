@@ -15,8 +15,8 @@
           = field_set_tag do
             %legend Trip information
             .row-fluid
-              = f.input :from, require: true,  :wrapper_html => { :class => 'span6' }
-              = f.input :to, require: true,  :wrapper_html => { :class => 'span6' }
+              = f.input :from, require: true, placeholder: 'Example: NY,Bronx',  :wrapper_html => { :class => 'span6' }
+              = f.input :to, require: true, placeholder: 'Example: NY,Queens',  :wrapper_html => { :class => 'span6' }
             .row-fluid
               = f.input :status, collection: @status.sort.map {|k,v| [v,k]} , :wrapper_html => { :class => 'span6' }
               = f.input :frequency, collection: @frequencies.sort.map {|k,v| [v,k]} , :wrapper_html => { :class => 'span6' }
@@ -24,10 +24,10 @@
           = field_set_tag do
             %legend Trip conditions and schedule
             .row-fluid
-              = f.input :js_start_time, require: true, as: :date_time_picker, label: "Start Time", :wrapper_html => { :class => 'span6' }
-              = f.input :js_finish_time, require: true, as: :date_time_picker, label: "Finish Time", :wrapper_html => { :class => 'span6' }
+              = f.input :js_start_time,  placeholder: 'dd/mm/yyyy 00:00:00 AM', require: true, as: :date_time_picker, label: "Start Time", :wrapper_html => { :class => 'span6' }
+              = f.input :js_finish_time,  placeholder: 'dd/mm/yyyy 00:00:00 AM', require: true, as: :date_time_picker, label: "Finish Time", :wrapper_html => { :class => 'span6' }
             %label Sits avalaible
             = f.number_field :sits, require: true
-            = f.input :conditions, as: :text, :input_html => { :cols => 50, :rows => 3, class: 'span12' }
+            = f.input :conditions, as: :text, :input_html => { :cols => 50, :rows => 3, class: 'span12' }, placeholder: 'Write your conditions here...'
             .actions
               = f.button :submit, 'Save', class: 'btn btn-large btn-primary pull-right'
