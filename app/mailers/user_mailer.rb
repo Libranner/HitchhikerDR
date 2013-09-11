@@ -1,6 +1,8 @@
+
+require 'digest/sha2'
 class UserMailer < ActionMailer::Base
   default from: "hitchhikerdr@gmail.com"
-
+  default "Message-ID"=>"#{Digest::SHA2.hexdigest(Time.now.to_i.to_s)}@gmail.com"
   # Subject can be set in your I18n file at config/locales/en.yml
   # with the following lookup:
   #
