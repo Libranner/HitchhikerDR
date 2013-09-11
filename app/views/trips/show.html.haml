@@ -82,7 +82,7 @@
 
   .form-trip.span4
     = field_set_tag do
-      %legend Trip information
+      %legend Route information
       /= image_tag "http://maps.google.com/maps/api/staticmap?size=300x300&sensor=false&zoom=16&markers=#{@trip.to_coordinates[0]}%2C#{@trip.to_coordinates[1]}"
       = gmaps(@polylines)
 
