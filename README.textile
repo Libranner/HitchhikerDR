@@ -1,6 +1,6 @@
 h1. Hitchhiker
 
-This a web based application where people can create trips and find other people to share the costs.
+This a web based application where people can create trips and find other people to share the costs. I used Ruby on Rails, MongoID and bootstrap to developed this project, feel free to fork it.
 
 h2. Ruby on Rails
 
