@@ -45,4 +45,4 @@ If you add functionality to this application, create an alternative implementati
 
 h2. Author
 
-Libranner L. Santos Espinal @libranner
+Libranner L. Santos Espinal "@libranner":http://twitter.com/libranner.
